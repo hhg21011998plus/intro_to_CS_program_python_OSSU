@@ -17,7 +17,7 @@ WORDLIST_FILENAME = "words.txt"
 
 def load_words():
     """
-    Returns a list of valid words. Words are strings of lowercase letters.
+        Returns a list of valid words. Words are strings of lowercase letters.
     
     Depending on the size of the word list, this function may
     take a while to finish.
@@ -63,8 +63,12 @@ def is_word_guessed(secret_word, letters_guessed):
       False otherwise
     '''
     # FILL IN YOUR CODE HERE AND DELETE "pass"
-    
-    pass
+    # pass
+
+    for letter in secret_word:
+        if letter not in letters_guessed:
+            return False
+    return True
 
 
 
@@ -76,7 +80,22 @@ def get_guessed_word(secret_word, letters_guessed):
       which letters in secret_word have been guessed so far.
     '''
     # FILL IN YOUR CODE HERE AND DELETE "pass"
-    pass
+    # pass
+
+    letters_sec = []
+    for letter in secret_word:
+        letters_sec.append(letter)
+        
+    letters_hiden = []
+    for item in range(len(letters_sec)):
+        letters_hiden.append("_ ")
+    
+    for letterGuess in letters_guessed:
+        if letterGuess in letters_sec:
+            pos = letters_sec.index(letterGuess)
+            letters_hiden[pos] = letterGuess
+            
+    return "".join(letters_hiden)
 
 
 
@@ -87,10 +106,19 @@ def get_available_letters(letters_guessed):
       yet been guessed.
     '''
     # FILL IN YOUR CODE HERE AND DELETE "pass"
-    pass
-    
-    
+    # pass
 
+    all_letter = string.ascii_lowercase
+    letter_list = []
+    for letter in all_letter:
+        letter_list.append(letter)
+    for letterGuess in letters_guessed:
+        for letterL in letter_list:
+            if letterGuess in letter_list:
+                letter_list.remove(letterGuess)
+    return "".join(letter_list)
+    
+    
 def hangman(secret_word):
     '''
     secret_word: string, the secret word to guess.
@@ -117,36 +145,7 @@ def hangman(secret_word):
     Follows the other limitations detailed in the problem write-up.
     '''
     # FILL IN YOUR CODE HERE AND DELETE "pass"
-    
-    secret_word_count = len(secret_word)
-    guesses_count = secret_word_count * 2
-    word = ""
-    
-    while guesses_count > 0:
-        print("Remaining the secret letter's count': ", secret_word_count)
-        print("The guess' count =", guesses_count)
-        inp = input("Enter a letter that you guess: ")
-        
-        for letter in secret_word:
-            if inp == letter:
-                word += inp
-                secret_word_count -= 1
-            else:
-                continue
-            
-        if len(word) == len(secret_word):
-            break
-        
-        print("We found word so far:", word)
-        print("---------------------------")
-        guesses_count -= 1
-    
-    if len(word) == len(secret_word):
-        print("The word we need: ", word)
-    else:
-        print("You lose")
-        
-    print("Answer:", secret_word)
+    pass
 
 # When you've completed your hangman function, scroll down to the bottom
 # of the file and uncomment the first two lines to test
@@ -231,8 +230,8 @@ def hangman_with_hints(secret_word):
     # To test part 2, comment out the pass line above and
     # uncomment the following two lines.
     
-secret_word = choose_word(wordlist)
-hangman(secret_word)
+# secret_word = choose_word(wordlist)
+# hangman(secret_word)
 
 ###############
     
