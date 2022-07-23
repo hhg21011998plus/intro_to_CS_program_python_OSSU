@@ -98,7 +98,6 @@ def get_guessed_word(secret_word, letters_guessed):
     return "".join(letters_hiden)
 
 
-
 def get_available_letters(letters_guessed):
     '''
     letters_guessed: list (of letters), which letters have been guessed so far
@@ -145,13 +144,64 @@ def hangman(secret_word):
     Follows the other limitations detailed in the problem write-up.
     '''
     # FILL IN YOUR CODE HERE AND DELETE "pass"
-    pass
+    # pass
 
+    guesses = 6
+    warning = 3
+    letters_guessed = ""
+    haveGuessed = ""
+    
+    print("Welcome to the game Hangman!")
+    print(f"I'm thinking of the word that is {len(secret_word)} letters long.")
+    print("------------")
+    print(f"You have {guesses} guesses left.")
+    print(f"Available letters: {string.ascii_lowercase}")
+    while True:
+        print("------------")
+        print(f"You have {warning} warnings left.")
+        print(f"You have {guesses} guesses left.")
+        print(f"Available letters: {get_available_letters(secret_word)}")
+        letterGuess = input("Please guess a letter: ")
+        letterGuess = str.lower(letterGuess)
+        
+        if not str.isalpha(letterGuess) or letterGuess in haveGuessed :
+            warning = warning - 1
+            goGuess = get_guessed_word(secret_word, letters_guessed)
+            print(f" Oops! That is not a valid letter or you have already guessed that letter. You have {warning} warnings left: {goGuess}")
+            if warning == 0:
+                print(f"Game Over. The word is {secret_word}")
+                break
+            continue
+                
+        if letterGuess in secret_word:
+            letters_guessed = letters_guessed + letterGuess
+            goGuess = get_guessed_word(secret_word, letters_guessed)
+            print(f"Good guess: {goGuess}")
+        else:
+            goGuess = get_guessed_word(secret_word, letters_guessed)
+            guesses = guesses - 1
+            print(f"Oops! That letter is not in my word: {goGuess}")
+            
+        haveGuessed = haveGuessed + letterGuess
+            
+        if guesses == 0:
+            print(f"Game Over. The word is {secret_word}")
+            break
+        elif goGuess == secret_word:
+            print(f"You Win. The word is {secret_word}")
+            break
+        
+             
+            
+    
+    
+    
 # When you've completed your hangman function, scroll down to the bottom
 # of the file and uncomment the first two lines to test
 #(hint: you might want to pick your own
 # secret_word while you're doing your own testing)
 
+hangman("house")
 
 # -----------------------------------
 
