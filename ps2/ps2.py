@@ -50,8 +50,8 @@ def choose_word(wordlist):
 # Load the list of words into the variable wordlist
 # so that it can be accessed from anywhere in the program
 wordlist = load_words()
-# randomWord = choose_word(wordlist)
-# print(randomWord)
+randomWord = choose_word(wordlist)
+print(randomWord)
 
 def is_word_guessed(secret_word, letters_guessed):
     '''
@@ -82,18 +82,16 @@ def get_guessed_word(secret_word, letters_guessed):
     # FILL IN YOUR CODE HERE AND DELETE "pass"
     # pass
 
-    letters_sec = []
-    for letter in secret_word:
-        letters_sec.append(letter)
-        
     letters_hiden = []
-    for item in range(len(letters_sec)):
+    for item in range(len(secret_word)):
         letters_hiden.append("_ ")
     
     for letterGuess in letters_guessed:
-        if letterGuess in letters_sec:
-            pos = letters_sec.index(letterGuess)
-            letters_hiden[pos] = letterGuess
+        n = 0
+        for letter in secret_word:
+            if letterGuess == letter:
+                letters_hiden[n] = letterGuess
+            n += 1
             
     return "".join(letters_hiden)
 
@@ -148,33 +146,44 @@ def hangman(secret_word):
 
     guesses = 6
     warning = 3
-    letters_guessed = ""
-    haveGuessed = ""
+    letters_guessed = list()
+    haveGuessed = list()
+    availableLetter = string.ascii_lowercase
+    checking = False
+    numberUniqueLetter = 0
     
     print("Welcome to the game Hangman!")
     print(f"I'm thinking of the word that is {len(secret_word)} letters long.")
     print("------------")
     print(f"You have {guesses} guesses left.")
-    print(f"Available letters: {string.ascii_lowercase}")
+    print(f"Available letters: {availableLetter}")
     while True:
         print("------------")
         print(f"You have {warning} warnings left.")
         print(f"You have {guesses} guesses left.")
-        print(f"Available letters: {get_available_letters(secret_word)}")
+        print(f"Available letters: {availableLetter}")
         letterGuess = input("Please guess a letter: ")
         letterGuess = str.lower(letterGuess)
         
         if not str.isalpha(letterGuess) or letterGuess in haveGuessed :
-            warning = warning - 1
             goGuess = get_guessed_word(secret_word, letters_guessed)
-            print(f" Oops! That is not a valid letter or you have already guessed that letter. You have {warning} warnings left: {goGuess}")
+            if letterGuess in haveGuessed:
+                print(f"Oops! You have already guessed that letter. You have {warning} warnings left: {goGuess}")
+            else:
+                print(f"Oops! That is not a valid letter. You have {warning} warnings left: {goGuess}")
+
             if warning == 0:
+                guesses = guesses - 1
+                warning = 1
+            warning = warning - 1
+            if guesses == 0:
                 print(f"Game Over. The word is {secret_word}")
                 break
             continue
-                
+        
         if letterGuess in secret_word:
-            letters_guessed = letters_guessed + letterGuess
+            numberUniqueLetter += 1
+            letters_guessed.append(letterGuess)
             goGuess = get_guessed_word(secret_word, letters_guessed)
             print(f"Good guess: {goGuess}")
         else:
@@ -182,26 +191,30 @@ def hangman(secret_word):
             guesses = guesses - 1
             print(f"Oops! That letter is not in my word: {goGuess}")
             
-        haveGuessed = haveGuessed + letterGuess
+        haveGuessed.append(letterGuess)
+        availableLetter = get_available_letters(haveGuessed)
             
         if guesses == 0:
+            print("------------")
             print(f"Game Over. The word is {secret_word}")
             break
         elif goGuess == secret_word:
+            checking = True
+            print("------------")
             print(f"You Win. The word is {secret_word}")
             break
+    
+    if checking:
+        totalScore = numberUniqueLetter * guesses
+        print(f"Your total score for this game is: {totalScore}")
         
-             
-            
-    
-    
     
 # When you've completed your hangman function, scroll down to the bottom
 # of the file and uncomment the first two lines to test
 #(hint: you might want to pick your own
 # secret_word while you're doing your own testing)
 
-hangman("house")
+hangman(randomWord)
 
 # -----------------------------------
 
