@@ -55,8 +55,8 @@
 
 semi_annual_raise = 0.07 
 return_annual = 0.04
-down_payment_house = 750000
-annual_salary = 150000
+down_payment_house = 250000
+starting_salary = int(input("Enter the starting salary: "))
 
 lower = 0
 higher = 10000
@@ -66,7 +66,8 @@ step_biSearch = 0
 possible = True
 
 while True:
-    step_biSearch =+ 1
+    step_biSearch += 1
+    annual_salary = starting_salary
     portion_saved = (lower + higher) / 2 / 10000
     month_salary = annual_salary / 12
     month_savings = month_salary * portion_saved
@@ -82,19 +83,22 @@ while True:
         if three_years % 6 == 0:
             annual_salary = annual_salary + (annual_salary * semi_annual_raise)
             month_salary = annual_salary / 12
-            month_savings = month_salary * portion_saved    
-    if abs(current_savings - down_payment_house) <= 100:
+            month_savings = month_salary * portion_saved
+            
+    print("curent saving:", current_savings)
+            
+    if abs(current_savings - down_payment_house) <= epsilon:
         break
     
     if current_savings > down_payment_house:
         higher = portion_saved * 10000
+        print("High:", higher)
     else:
         lower = portion_saved * 10000
-    
+        print("Lower:", lower)
     if lower >= higher:
         possible = False
         break
-    
 
 if possible:
     print("Step of Bisection:", step_biSearch)
